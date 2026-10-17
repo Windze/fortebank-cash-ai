@@ -1,0 +1,1014 @@
+<!DOCTYPE html>
+<html lang="ru" data-theme="dark" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DATATHON '26 | ForteBank AI Кассовый Инспектор</title>
+  
+  <!-- Local Monocraft (Original Minecraft Font with Cyrillic) + Inter for body text -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    @font-face {
+      font-family: 'Monocraft';
+      src: url('/static/fonts/Monocraft.otf') format('opentype');
+      font-display: swap;
+    }
+
+    body {
+      background-color: #090414;
+      background-image: 
+        radial-gradient(circle at 50% 0%, rgba(133, 0, 75, 0.22) 0%, transparent 55%),
+        radial-gradient(circle at 90% 90%, rgba(93, 184, 74, 0.08) 0%, transparent 45%);
+      color: #E8E0F5;
+      font-family: 'Inter', -apple-system, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    .font-minecraft {
+      font-family: 'Monocraft', monospace;
+      letter-spacing: 0.03em;
+    }
+
+    /* 3D Pixel Title from datathon.com.kz */
+    .title-3d {
+      font-family: 'Monocraft', monospace;
+      text-transform: uppercase;
+      color: #F5EEFF;
+      text-shadow: 
+        0 2px 0 #D4C2F7,
+        0 4px 0 #9F7DE3,
+        0 6px 0 #6A44B8,
+        0 8px 0 #462688,
+        0 10px 0 #2A115E,
+        0 14px 18px rgba(0, 0, 0, 0.9);
+    }
+
+    /* Minecraft Styled Action Buttons */
+    .btn-mc-primary {
+      background-color: #C7B5EC;
+      color: #170933;
+      font-family: 'Monocraft', monospace;
+      font-size: 14px;
+      text-transform: uppercase;
+      border: 2px solid #000;
+      box-shadow: 
+        inset 2px 2px 0 #fff,
+        inset -2px -2px 0 #896ec4,
+        3px 3px 0 #000;
+      cursor: pointer;
+      transition: all 0.08s ease;
+    }
+    .btn-mc-primary:hover {
+      background-color: #DDD2F5;
+      transform: translate(-1px, -1px);
+      box-shadow: 
+        inset 2px 2px 0 #fff,
+        inset -2px -2px 0 #896ec4,
+        4px 4px 0 #000;
+    }
+    .btn-mc-primary:active {
+      transform: translate(1px, 1px);
+      box-shadow: 2px 2px 0 #000;
+    }
+
+    .btn-mc-forte {
+      background-color: #85004B;
+      color: #ffffff;
+      font-family: 'Monocraft', monospace;
+      font-size: 14px;
+      text-transform: uppercase;
+      border: 2px solid #000;
+      box-shadow: 
+        inset 2px 2px 0 #c20f75,
+        inset -2px -2px 0 #4f002d,
+        3px 3px 0 #000;
+      cursor: pointer;
+      transition: all 0.08s ease;
+    }
+    .btn-mc-forte:hover {
+      background-color: #a1005c;
+      transform: translate(-1px, -1px);
+      box-shadow: 
+        inset 2px 2px 0 #c20f75,
+        inset -2px -2px 0 #4f002d,
+        4px 4px 0 #000;
+    }
+    .btn-mc-forte:active {
+      transform: translate(1px, 1px);
+      box-shadow: 2px 2px 0 #000;
+    }
+
+    .btn-mc-secondary {
+      background-color: #1a0f33;
+      color: #E8E0F5;
+      border: 1px solid #3d226e;
+      box-shadow: 2px 2px 0 #000;
+      transition: all 0.08s ease;
+      cursor: pointer;
+    }
+    .btn-mc-secondary:hover {
+      background-color: #27164d;
+      border-color: #B79CEC;
+      color: #fff;
+      transform: translate(-1px, -1px);
+      box-shadow: 3px 3px 0 #000;
+    }
+
+    /* Cards */
+    .mc-card {
+      background: #140d28;
+      border: 2px solid #2d1952;
+      box-shadow: 4px 4px 0 #000;
+    }
+
+    /* Chips */
+    .mc-chip {
+      background: #170d30;
+      border: 2px solid #3e2470;
+      color: #E8E0F5;
+      font-family: 'Monocraft', monospace;
+      font-size: 12px;
+      padding: 3px 10px;
+      box-shadow: 0 0 0 1px #E8913A, 2px 2px 0 #000;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      text-transform: uppercase;
+    }
+
+    /* Boss Raid Bar */
+    .mc-bar {
+      height: 10px;
+      background: #0d061c;
+      border: 2px solid #000;
+      overflow: hidden;
+    }
+    .mc-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #5DB84A, #78CC63);
+      box-shadow: 0 0 10px rgba(93, 184, 74, 0.7);
+      transition: width 0.3s ease;
+    }
+    .mc-bar-fill.danger {
+      background: linear-gradient(90deg, #85004B, #FF4D6D);
+      box-shadow: 0 0 10px rgba(255, 77, 109, 0.7);
+    }
+
+    /* Language Switcher Tabs */
+    .lang-btn {
+      font-family: 'Monocraft', monospace;
+      font-size: 12px;
+      padding: 4px 9px;
+      border: 1px solid #3d226e;
+      background: #130a24;
+      color: #A792D4;
+      transition: all 0.1s ease;
+      cursor: pointer;
+    }
+    .lang-btn.active {
+      background: #85004B;
+      color: #ffffff;
+      border-color: #ba1569;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased selection:bg-[#85004B] selection:text-white">
+
+  <!-- TOP NAVBAR -->
+  <header class="border-b-2 border-[#2c1854] bg-[#0c051a]/95 sticky top-0 z-50 px-4 sm:px-8 py-3.5">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+      
+      <!-- Brand Logo in Minecraft Font -->
+      <div class="flex items-center gap-3">
+        <a href="/" class="flex items-center gap-2 group">
+          <span class="font-minecraft text-lg sm:text-xl text-[#C7B5EC] tracking-wider group-hover:text-[#F5C542] transition">
+            DATATHON '26
+          </span>
+          <span class="text-[#41247a] font-bold">/</span>
+          <span class="font-minecraft text-base sm:text-lg text-[#FF2E93] font-bold">
+            FORTE<span class="text-white">.AI</span>
+          </span>
+        </a>
+        <div class="flex items-center gap-2 px-3 py-1 bg-[#85004B]/30 border border-[#ba1569] rounded font-minecraft text-xs text-white tracking-wider shadow-[0_0_12px_rgba(255,46,147,0.35)]">
+          <span class="w-2 h-2 rounded-full bg-[#FF2E93] animate-pulse"></span>
+          <span>TEAM BIG4</span>
+        </div>
+        <span class="hidden sm:inline-flex items-center gap-2 mc-chip text-[#78CC63]">
+          <span class="w-2 h-2 rounded-full bg-[#5DB84A]"></span> <span id="t_badge_offline">OFFLINE AI</span>
+        </span>
+      </div>
+
+      <!-- Right Nav Status, Language Switcher & Key -->
+      <div class="flex items-center gap-3 sm:gap-4 text-xs">
+        
+        <!-- Language Switcher: РУС | ҚАЗ | ENG -->
+        <div class="flex items-center border border-[#3d226e] rounded overflow-hidden">
+          <button onclick="setLang('ru')" id="btn_lang_ru" class="lang-btn active">РУС</button>
+          <button onclick="setLang('kz')" id="btn_lang_kz" class="lang-btn">ҚАЗ</button>
+          <button onclick="setLang('en')" id="btn_lang_en" class="lang-btn">ENG</button>
+        </div>
+
+        <div class="hidden lg:flex items-center gap-2 px-3 py-1 bg-[#130a24] border border-[#2c1854] font-mono text-xs">
+          <span class="text-gray-400">X-API-KEY:</span>
+          <span class="text-[#E8E0F5]">forte-datathon-2026-key</span>
+        </div>
+
+        <a href="/docs" target="_blank" class="btn-mc-secondary px-3 py-1.5 rounded flex items-center gap-1.5 font-minecraft text-xs">
+          <span id="t_api_docs">API Docs</span>
+          <svg class="w-3.5 h-3.5 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTAINER -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-8 py-8 space-y-8">
+
+    <!-- HERO HEADER -->
+    <section class="space-y-4">
+      <div class="flex items-center gap-2">
+        <span class="font-minecraft text-xs text-[#FF2E93] uppercase tracking-wider font-bold">TEAM BIG4</span>
+        <span class="text-[#41247a]">/</span>
+        <span class="font-minecraft text-xs text-[#A792D4] uppercase tracking-wider">NU DATA SCIENCE CLUB & FORTEBANK</span>
+        <span class="text-[#41247a]">/</span>
+        <span id="t_hero_tag" class="font-minecraft text-xs text-gray-400">КАССОВЫЙ ИНСПЕКТОР</span>
+      </div>
+
+      <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
+        <div>
+          <!-- Big 3D Minecraft Title -->
+          <h1 class="title-3d text-4xl sm:text-6xl lg:text-7xl leading-tight">
+            DATATHON'26
+          </h1>
+          <h2 id="t_hero_h2" class="font-minecraft text-xl sm:text-2xl text-[#FF2E93] mt-2">
+            КОНТРОЛЬ КАССОВОЙ ДИСЦИПЛИНЫ
+          </h2>
+          <p id="t_hero_desc" class="mt-2 text-gray-300 text-sm sm:text-base max-w-2xl leading-relaxed">
+            Автоматическое выявление нарушений по видеозаписям кассы (.mov). Точные таймкоды, доказательная база и юридическое обоснование по нормативным актам НБРК.
+          </p>
+        </div>
+
+        <!-- Minecraft Chips -->
+        <div class="flex flex-wrap gap-2.5">
+          <span class="mc-chip text-[#F5C542] border-[#F5C542]/40 bg-[#1d1230]">TEAM BIG4</span>
+          <span id="t_chip_offline" class="mc-chip text-[#78CC63]">100% OFFLINE</span>
+          <span id="t_chip_nbrk" class="mc-chip">НБРК РК</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- WORKBENCH GRID -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      
+      <!-- LEFT COLUMN: VIDEO UPLOAD & CONTROLS (5 cols) -->
+      <div class="lg:col-span-5 space-y-6">
+
+        <!-- Upload & Quick Select Card -->
+        <div class="mc-card p-5 space-y-4">
+          <div class="flex items-center justify-between border-b border-[#2c1854] pb-3">
+            <h2 id="t_upload_title" class="font-minecraft text-sm text-white tracking-wide uppercase">
+              ЗАГРУЗКА ВИДЕОЗАПИСИ
+            </h2>
+            <span class="text-xs text-gray-400 font-mono">.mov</span>
+          </div>
+
+          <!-- Drag & Drop Box -->
+          <div 
+            id="dropZone" 
+            class="border-2 border-dashed border-[#2c1854] hover:border-[#FF2E93] transition p-6 text-center cursor-pointer bg-[#0c051a]/60 flex flex-col items-center justify-center min-h-[150px]"
+          >
+            <input type="file" id="fileInput" accept=".mov,.mp4" class="hidden" onchange="onFileSelected(this.files[0])" />
+            
+            <svg class="w-10 h-10 text-gray-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+            </svg>
+            <p id="t_drop_title" class="font-minecraft text-xs text-white uppercase">Перетащите видеофайл сюда</p>
+            <p id="t_drop_sub" class="text-xs text-gray-400 mt-1 font-sans">или нажмите для выбора с диска</p>
+            <p id="fileLabel" class="text-xs font-mono text-[#F5C542] mt-2 hidden break-all"></p>
+          </div>
+
+          <!-- Quick Test Samples from Dataset -->
+          <div class="space-y-2 pt-1">
+            <p id="t_samples_title" class="text-xs text-gray-400 font-minecraft uppercase">Быстрая проверка из датасета (1 клик):</p>
+            <div class="grid grid-cols-2 gap-2 text-xs">
+              <button onclick="loadSample('X-1.mov', 'X-1')" class="btn-mc-secondary p-2 text-left rounded truncate flex items-center font-minecraft text-[11px]">
+                <span class="w-2 h-2 rounded-full bg-[#f43f5e] mr-2 shrink-0"></span>
+                <span id="t_sample_1" class="truncate">X-1 (Пересчет)</span>
+              </button>
+              <button onclick="loadSample('Х-18.mov', 'X-18')" class="btn-mc-secondary p-2 text-left rounded truncate flex items-center font-minecraft text-[11px]">
+                <span class="w-2 h-2 rounded-full bg-[#f43f5e] mr-2 shrink-0"></span>
+                <span id="t_sample_18" class="truncate">X-18 (Посторонние)</span>
+              </button>
+              <button onclick="loadSample('Х-20.mov', 'X-20')" class="btn-mc-secondary p-2 text-left rounded truncate flex items-center font-minecraft text-[11px]">
+                <span class="w-2 h-2 rounded-full bg-[#f43f5e] mr-2 shrink-0"></span>
+                <span id="t_sample_20" class="truncate">X-20 (Смартфон)</span>
+              </button>
+              <button onclick="loadSample('Х-40.mov', 'X-40')" class="btn-mc-secondary p-2 text-left rounded truncate flex items-center font-minecraft text-[11px]">
+                <span class="w-2 h-2 rounded-full bg-[#f43f5e] mr-2 shrink-0"></span>
+                <span id="t_sample_40" class="truncate">X-40 (Одежда)</span>
+              </button>
+              <button onclick="loadSample('Х-46.mov', 'X-46')" class="btn-mc-secondary p-2 text-left rounded truncate flex items-center font-minecraft text-[11px]">
+                <span class="w-2 h-2 rounded-full bg-[#f43f5e] mr-2 shrink-0"></span>
+                <span id="t_sample_46" class="truncate">X-46 (Напиток)</span>
+              </button>
+              <button onclick="loadSample('Х-3.mov', 'X-3')" class="btn-mc-secondary p-2 text-left rounded truncate flex items-center border-[#5DB84A]/50 text-[#78CC63] font-minecraft text-[11px]">
+                <span class="w-2 h-2 rounded-full bg-[#5DB84A] mr-2 shrink-0"></span>
+                <span id="t_sample_3" class="truncate font-semibold">X-3 (Норма)</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Start Button in Minecraft Style -->
+          <button id="startBtn" onclick="startAnalysis()" class="w-full btn-mc-forte py-3.5 text-center justify-center flex items-center gap-2">
+            <span id="t_start_btn">ЗАПУСТИТЬ АНАЛИЗ AI</span>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+          </button>
+        </div>
+
+        <!-- Progress Tracker (Boss Health Bar) -->
+        <div id="progressCard" class="mc-card p-4 space-y-2.5 hidden">
+          <div class="flex items-center justify-between text-xs">
+            <span id="t_progress_title" class="font-minecraft text-gray-300 uppercase">ОБРАБОТКА ВИДЕОПОТОКА</span>
+            <span id="progressPercent" class="font-minecraft text-[#78CC63] font-bold">0%</span>
+          </div>
+          <div class="mc-bar">
+            <div id="progressBarFill" class="mc-bar-fill" style="width: 0%"></div>
+          </div>
+          <div class="flex items-center justify-between text-xs font-mono text-gray-400">
+            <span id="progressStage">Запуск детектора...</span>
+            <span id="progressTimer">0.0s</span>
+          </div>
+        </div>
+
+        <!-- Normative Framework Box (НБРК) -->
+        <div class="mc-card p-5 space-y-3 text-xs">
+          <h3 id="t_laws_title" class="font-minecraft text-white text-sm flex items-center gap-2">
+            НОРМАТИВНЫЙ БАЗИС РК
+          </h3>
+          <p id="t_laws_desc" class="text-gray-400 leading-relaxed font-sans">
+            Правовая оценка базируется на открытых актах Национального Банка РК (ИПС «Әділет»):
+          </p>
+          <div class="space-y-2 font-mono">
+            <div class="p-2.5 bg-[#0c051a] border border-[#2c1854]">
+              <span id="t_law_1_tag" class="text-[#F5C542] font-bold font-minecraft text-[11px]">НБРК № 231 (пп. 38, 42):</span>
+              <p id="t_law_1_body" class="text-gray-300 mt-0.5 font-sans">Обязательное запирание штампов и ценностей в сейф при оставлении рабочего места; запрет посторонних лиц.</p>
+            </div>
+            <div class="p-2.5 bg-[#0c051a] border border-[#2c1854]">
+              <span id="t_law_2_tag" class="text-[#F5C542] font-bold font-minecraft text-[11px]">НБРК № 266 (глава 3):</span>
+              <p id="t_law_2_body" class="text-gray-300 mt-0.5 font-sans">Строгий режим постоянно запертых входных дверей в кассовые кабины.</p>
+            </div>
+            <div class="p-2.5 bg-[#0c051a] border border-[#2c1854]">
+              <span id="t_law_3_tag" class="text-[#F5C542] font-bold font-minecraft text-[11px]">Закон о банках (ст. 50):</span>
+              <p id="t_law_3_body" class="text-gray-300 mt-0.5 font-sans">Банковская тайна и защита персональных данных (обязанность блокировки монитора АРМ).</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- RIGHT COLUMN: VIDEO PLAYER & RESULTS (7 cols) -->
+      <div class="lg:col-span-7 space-y-6">
+
+        <!-- Video Player Card -->
+        <div class="mc-card p-5 space-y-4">
+          <div class="flex items-center justify-between border-b border-[#2c1854] pb-3">
+            <h2 id="t_monitor_title" class="font-minecraft text-white text-xs sm:text-sm flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-[#FF2E93] animate-pulse"></span>
+              МОНИТОР КАССОВОГО УЗЛА
+            </h2>
+            <span id="videoTimer" class="font-minecraft text-sm font-bold text-[#F5C542]">00:00.0</span>
+          </div>
+
+          <!-- Video Display -->
+          <div class="relative aspect-[9/16] max-h-[460px] mx-auto bg-black border-2 border-[#2c1854] overflow-hidden flex items-center justify-center">
+            <video id="player" controls playsinline class="w-full h-full object-contain"></video>
+            
+            <div id="videoEmptyState" class="absolute inset-0 flex flex-col items-center justify-center p-6 text-center bg-[#130a24]/95">
+              <svg class="w-12 h-12 text-gray-500 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+              </svg>
+              <p id="t_video_empty_title" class="font-minecraft text-white text-xs">ВИДЕОСИГНАЛ НЕ ВЫБРАН</p>
+              <p id="t_video_empty_sub" class="text-xs text-gray-400 mt-1 max-w-sm font-sans">
+                Выберите образец из списка слева или загрузите файл .mov
+              </p>
+            </div>
+          </div>
+
+          <!-- Timeline Markers -->
+          <div class="space-y-1.5 pt-1">
+            <div class="flex justify-between text-xs font-mono text-gray-400">
+              <span id="t_timeline_label" class="font-minecraft text-[11px]">ХРОНОЛОГИЯ СОБЫТИЙ:</span>
+              <span id="markersText">0 меток</span>
+            </div>
+            <div id="timelineTrack" class="relative w-full h-3 bg-[#0c051a] border border-[#2c1854] cursor-pointer">
+              <!-- Event markers will appear here -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Results & Violations Section -->
+        <div id="resultsSection" class="space-y-4 hidden">
+          
+          <!-- Verdict Banner in Minecraft Font -->
+          <div id="verdictBanner" class="mc-card p-5 flex items-center justify-between border-l-4">
+            <div>
+              <p id="t_verdict_label" class="text-xs uppercase font-minecraft text-gray-400">ВЕРДИКТ СЛУЖБЫ БЕЗОПАСНОСТИ</p>
+              <h3 id="verdictText" class="font-minecraft text-base sm:text-lg font-bold mt-1">ОЖИДАНИЕ</h3>
+            </div>
+            <div id="verdictIconContainer" class="p-2 rounded-full"></div>
+          </div>
+
+          <!-- Violations Header & Actions -->
+          <div class="flex items-center justify-between pt-2">
+            <h3 id="t_events_heading" class="font-minecraft text-white text-sm sm:text-base">
+              ВЫЯВЛЕННЫЕ СОБЫТИЯ (<span id="violationsTotal">0</span>)
+            </h3>
+            <button onclick="toggleJsonView()" id="t_json_btn" class="btn-mc-secondary px-3 py-1.5 text-xs font-minecraft">
+              JSON ДЛЯ ЖЮРИ
+            </button>
+          </div>
+
+          <!-- Cards List -->
+          <div id="violationsList" class="space-y-4">
+            <!-- Cards injected dynamically -->
+          </div>
+
+          <!-- Raw JSON Accordion -->
+          <div id="rawJsonBox" class="mc-card p-4 space-y-3 hidden">
+            <div class="flex items-center justify-between border-b border-[#2c1854] pb-2">
+              <span id="t_json_spec" class="text-xs font-minecraft text-[#F5C542]">СТАНДАРТ API (РАЗДЕЛ 10 ТЗ)</span>
+              <button onclick="copyJsonToClipboard()" id="t_copy_btn" class="btn-mc-primary text-xs py-1 px-3">
+                КОПИРОВАТЬ JSON
+              </button>
+            </div>
+            <pre id="rawJsonCode" class="bg-[#090414] p-3 text-xs font-mono text-[#78CC63] overflow-x-auto max-h-72 border border-[#2c1854]"></pre>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- LIGHTBOX MODAL FOR EVIDENCE FRAMES -->
+  <div id="frameModal" class="fixed inset-0 z-50 bg-black/90 backdrop-blur hidden flex items-center justify-center p-4" onclick="closeFrameModal()">
+    <div class="mc-card max-w-3xl w-full p-4 space-y-3" onclick="event.stopPropagation()">
+      <div class="flex items-center justify-between border-b border-[#2c1854] pb-2">
+        <h4 id="modalCaption" class="text-xs font-minecraft text-white">КАДР-ДОКАЗАТЕЛЬСТВО</h4>
+        <button onclick="closeFrameModal()" class="text-gray-400 hover:text-white text-lg">✕</button>
+      </div>
+      <img id="modalImg" class="w-full max-h-[75vh] object-contain bg-black" src="" alt="Proof Frame" />
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="mt-16 border-t-2 border-[#2c1854] bg-[#0c051a] py-6 text-xs text-gray-400 font-mono">
+    <div class="max-w-7xl mx-auto px-4 sm:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div>
+        <span class="text-white font-minecraft text-xs">DATATHON '26</span> — <span id="t_footer_desc">Решение для трека ForteBank</span>
+      </div>
+      <div class="flex items-center gap-4">
+        <span><span id="t_footer_time">Инференс:</span> <b class="text-[#78CC63] font-mono">&lt; 3 сек</b></span>
+        <span>•</span>
+        <span><span id="t_footer_arch">Архитектура:</span> <b class="text-gray-300 font-mono">YOLOv8 + Spatial Rules</b></span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- MULTI-LANGUAGE TRANSLATION DICTIONARY -->
+  <script>
+    const I18N = {
+      ru: {
+        badge_offline: "OFFLINE AI",
+        api_docs: "Спецификация API",
+        hero_tag: "КАССОВЫЙ ИНСПЕКТОР",
+        hero_h2: "КОНТРОЛЬ КАССОВОЙ ДИСЦИПЛИНЫ",
+        hero_desc: "Автоматическое выявление нарушений по видеозаписям кассы (.mov). Точные таймкоды, доказательная база и юридическое обоснование по нормативным актам НБРК.",
+        chip_offline: "100% OFFLINE",
+        chip_nbrk: "НБРК РК",
+        upload_title: "ЗАГРУЗКА ВИДЕОЗАПИСИ",
+        drop_title: "Перетащите видеофайл сюда",
+        drop_sub: "или нажмите для выбора с диска",
+        samples_title: "Быстрая проверка из датасета (1 клик):",
+        sample_1: "X-1 (Пересчет)",
+        sample_18: "X-18 (Посторонние)",
+        sample_20: "X-20 (Смартфон)",
+        sample_40: "X-40 (Одежда)",
+        sample_46: "X-46 (Напиток)",
+        sample_3: "X-3 (Норма)",
+        start_btn: "ЗАПУСТИТЬ АНАЛИЗ AI",
+        progress_title: "ОБРАБОТКА ВИДЕОПОТОКА",
+        stage_init: "Запуск детектора...",
+        stage_upload: "Отправка видео на локальный AI-сервер...",
+        stage_process: "Инференс YOLOv8 и пространственный анализ...",
+        stage_rules: "Анализ таймкодов и сверка с правилами НБРК...",
+        stage_done: "Анализ завершен успешно!",
+        laws_title: "НОРМАТИВНЫЙ БАЗИС РК",
+        laws_desc: "Правовая оценка базируется на открытых актах Национального Банка РК (ИПС «Әділет»):",
+        law_1_tag: "НБРК № 231 (пп. 38, 42):",
+        law_1_body: "Обязательное запирание штампов и ценностей в сейф при оставлении рабочего места; запрет посторонних лиц.",
+        law_2_tag: "НБРК № 266 (глава 3):",
+        law_2_body: "Строгий режим постоянно запертых входных дверей в кассовые кабины.",
+        law_3_tag: "Закон о банках (ст. 50):",
+        law_3_body: "Банковская тайна и защита персональных данных (обязанность блокировки монитора АРМ).",
+        monitor_title: "МОНИТОР КАССОВОГО УЗЛА",
+        video_empty_title: "ВИДЕОСИГНАЛ НЕ ВЫБРАН",
+        video_empty_sub: "Выберите образец из списка слева или загрузите файл .mov",
+        timeline_label: "ХРОНОЛОГИЯ СОБЫТИЙ:",
+        markers_unit: "меток на ленте",
+        verdict_label: "ВЕРДИКТ СЛУЖБЫ БЕЗОПАСНОСТИ",
+        verdict_violation: "ОБНАРУЖЕНЫ ПРИЗНАКИ НАРУШЕНИЙ",
+        verdict_no_violation: "НАРУШЕНИЙ НЕ ОБНАРУЖЕНО",
+        verdict_clean_title: "КАССОВАЯ ДИСЦИПЛИНА ПОЛНОСТЬЮ СОБЛЮДЕНА",
+        verdict_clean_sub: "На всей длительности видео нарушений регламента безопасности не выявлено.",
+        events_heading: "ВЫЯВЛЕННЫЕ СОБЫТИЯ",
+        json_btn: "JSON ДЛЯ ЖЮРИ",
+        json_spec: "СТАНДАРТ API (РАЗДЕЛ 10 ТЗ)",
+        copy_btn: "КОПИРОВАТЬ JSON",
+        copied_alert: "JSON для жюри успешно скопирован в буфер обмена!",
+        modal_caption: "КАДР-ДОКАЗАТЕЛЬСТВО",
+        view_frame: "ПРОСМОТР КАДРА",
+        timecode: "ТАЙМКОД",
+        proof_frames: "Кадры-доказательства",
+        footer_desc: "Решение для трека ForteBank",
+        footer_time: "Инференс:",
+        footer_arch: "Архитектура:"
+      },
+      kz: {
+        badge_offline: "ОФЛАЙН AI",
+        api_docs: "API сипаттамасы",
+        hero_tag: "КАССАЛЫҚ ИНСПЕКТОР",
+        hero_h2: "КАССАЛЫҚ ТӘРТІПТІ БАҚЫЛАУ",
+        hero_desc: "Кассалық бейнежазбалар (.mov) бойынша заңбұзушылықтарды автоматты түрде анықтау. Нақты таймкодтар, дәлелдемелік база және ҚР ҰБ нормативтік актілеріне сәйкес құқықтық негіздеме.",
+        chip_offline: "100% ОФЛАЙН",
+        chip_nbrk: "ҚР ҰЛТТЫҚ БАНКІ",
+        upload_title: "БЕЙНЕЖАЗБАНЫ ЖҮКТЕУ",
+        drop_title: "Бейнефайлды осында сүйреңіз",
+        drop_sub: "немесе дискіден таңдау үшін басыңыз",
+        samples_title: "Датасет үлгілері (1 басумен тексеру):",
+        sample_1: "X-1 (Қайта санау)",
+        sample_18: "X-18 (Бөгде адамдар)",
+        sample_20: "X-20 (Смартфон)",
+        sample_40: "X-40 (Киім-кешек)",
+        sample_46: "X-46 (Сусын/тамақ)",
+        sample_3: "X-3 (Қалыпты)",
+        start_btn: "AI ТАЛДАУДЫ БАСТАУ",
+        progress_title: "БЕЙНЕАҒЫНДЫ ӨҢДЕУ",
+        stage_init: "Детекторды іске қосу...",
+        stage_upload: "Бейнені жергілікті AI-серверге жіберу...",
+        stage_process: "YOLOv8 инференсі және кеңістіктік талдау...",
+        stage_rules: "Таймкодтарды талдау және ҚР ҰБ ережелерімен салыстыру...",
+        stage_done: "Талдау сәтті аяқталды!",
+        laws_title: "ҚР НОРМАТИВТІК НЕГІЗДЕМЕСІ",
+        laws_desc: "Құқықтық бағалау ҚР Ұлттық Банкінің ашық актілеріне («Әділет» АҚЖ) негізделген:",
+        law_1_tag: "ҚР ҰБ № 231 (38, 42-т.):",
+        law_1_body: "Жұмыс орнынан кеткен кезде штамптар мен құндылықтарды сейфке міндетті түрде жабу; бөгде адамдарға тыйым салу.",
+        law_2_tag: "ҚР ҰБ № 266 (3-тарау):",
+        law_2_body: "Касса кабиналарының кіреберіс есіктерін үнемі жабық ұстау режимі.",
+        law_3_tag: "Банктер туралы заң (50-бап):",
+        law_3_body: "Банктік құпия және дербес деректерді қорғау (АРМ мониторын міндетті түрде бұғаттау).",
+        monitor_title: "КАССАЛЫҚ ТОРАП МОНИТОРЫ",
+        video_empty_title: "БЕЙНЕСИГНАЛ ТАҢДАЛМАҒАН",
+        video_empty_sub: "Сол жақтағы тізімнен үлгіні таңдаңыз немесе .mov файлын жүктеңіз",
+        timeline_label: "ОҚИҒАЛАР ХРОНОЛОГИЯСЫ:",
+        markers_unit: "лентадағы белгілер",
+        verdict_label: "ҚАУІПСІЗДІК ҚЫЗМЕТІНІҢ ҚОРЫТЫНДЫСЫ",
+        verdict_violation: "БҰЗУШЫЛЫҚ БЕЛГІЛЕРІ АНЫҚТАЛДЫ",
+        verdict_no_violation: "БҰЗУШЫЛЫҚТАР АНЫҚТАЛҒАН ЖОҚ",
+        verdict_clean_title: "КАССАЛЫҚ ТӘРТІП ТОЛЫҚ САҚТАЛҒАН",
+        verdict_clean_sub: "Бейненің барлық ұзақтығында қауіпсіздік регламентін бұзушылықтар анықталған жоқ.",
+        events_heading: "АНЫҚТАЛҒАН ОҚИҒАЛАР",
+        json_btn: "ҚАЗЫЛАР АЛҚАСЫ ҮШІН JSON",
+        json_spec: "API СТАНДАРТЫ (ТЗ 10-БӨЛІМ)",
+        copy_btn: "JSON КӨШІРУ",
+        copied_alert: "Қазылар алқасына арналған JSON буферге сәтті көшірілді!",
+        modal_caption: "ДӘЛЕЛДЕМЕЛІК КАДР",
+        view_frame: "КАДРДЫ КӨРУ",
+        timecode: "ТАЙМКОД",
+        proof_frames: "Дәлелдемелік кадрлар",
+        footer_desc: "ForteBank трегіне арналған шешім",
+        footer_time: "Инференс:",
+        footer_arch: "Архитектурасы:"
+      },
+      en: {
+        badge_offline: "OFFLINE AI",
+        api_docs: "API Specification",
+        hero_tag: "CASH DESK INSPECTOR",
+        hero_h2: "CASH DESK DISCIPLINE MONITORING",
+        hero_desc: "Automated detection of cash desk violations from video (.mov). Accurate timecodes, evidence frames, and legal reasoning based on National Bank of RK regulations.",
+        chip_offline: "100% OFFLINE",
+        chip_nbrk: "NBRK REGULATION",
+        upload_title: "VIDEO UPLOAD",
+        drop_title: "Drag and drop video file here",
+        drop_sub: "or click to browse from disk",
+        samples_title: "Dataset Samples (1-click test):",
+        sample_1: "X-1 (Recounting)",
+        sample_18: "X-18 (Unauthorized)",
+        sample_20: "X-20 (Smartphone)",
+        sample_40: "X-40 (Outerwear)",
+        sample_46: "X-46 (Beverage)",
+        sample_3: "X-3 (Normal)",
+        start_btn: "START AI ANALYSIS",
+        progress_title: "VIDEO STREAM PROCESSING",
+        stage_init: "Starting detector...",
+        stage_upload: "Uploading video to local AI server...",
+        stage_process: "YOLOv8 inference and spatial reasoning...",
+        stage_rules: "Analyzing timecodes and checking NBRK rules...",
+        stage_done: "Analysis completed successfully!",
+        laws_title: "KAZAKHSTAN REGULATORY BASIS",
+        laws_desc: "Legal compliance is matched against public acts of the National Bank of RK (Adilet Zan):",
+        law_1_tag: "NBRK No. 231 (cl. 38, 42):",
+        law_1_body: "Mandatory locking of stamps and valuables in safes upon absence; ban on unauthorized persons in cash desk.",
+        law_2_tag: "NBRK No. 266 (Chapter 3):",
+        law_2_body: "Strict locked-door policy for cash cabins during cash handling operations.",
+        law_3_tag: "Banking Law (Art. 50):",
+        law_3_body: "Banking secrecy and personal data protection (mandatory screen lock upon departure from workstation).",
+        monitor_title: "CASH CABIN MONITOR",
+        video_empty_title: "NO VIDEO SIGNAL SELECTED",
+        video_empty_sub: "Select a sample video from the left or upload your own .mov file",
+        timeline_label: "EVENT TIMELINE:",
+        markers_unit: "markers on timeline",
+        verdict_label: "SECURITY SERVICE VERDICT",
+        verdict_violation: "VIOLATION DETECTED",
+        verdict_no_violation: "NO VIOLATIONS DETECTED",
+        verdict_clean_title: "CASH DISCIPLINE FULLY COMPLIED",
+        verdict_clean_sub: "No security or discipline violations observed across the entire video.",
+        events_heading: "DETECTED EVENTS",
+        json_btn: "JURY RAW JSON",
+        json_spec: "API STANDARD (SECTION 10 TZ)",
+        copy_btn: "COPY JSON",
+        copied_alert: "Jury JSON successfully copied to clipboard!",
+        modal_caption: "EVIDENCE FRAME",
+        view_frame: "VIEW FRAME",
+        timecode: "TIMECODE",
+        proof_frames: "Evidence Frames",
+        footer_desc: "Solution for ForteBank Hackathon Track",
+        footer_time: "Inference:",
+        footer_arch: "Architecture:"
+      }
+    };
+
+    let currentLang = localStorage.getItem('forte_lang') || 'ru';
+
+    function setLang(lang) {
+      currentLang = lang;
+      localStorage.setItem('forte_lang', lang);
+
+      // Update button active state
+      ['ru', 'kz', 'en'].forEach(l => {
+        const btn = document.getElementById(`btn_lang_${l}`);
+        if (btn) {
+          if (l === lang) btn.classList.add('active');
+          else btn.classList.remove('active');
+        }
+      });
+
+      const t = I18N[lang] || I18N.ru;
+
+      // Update static elements
+      document.getElementById('t_badge_offline').textContent = t.badge_offline;
+      document.getElementById('t_api_docs').textContent = t.api_docs;
+      document.getElementById('t_hero_tag').textContent = t.hero_tag;
+      document.getElementById('t_hero_h2').textContent = t.hero_h2;
+      document.getElementById('t_hero_desc').textContent = t.hero_desc;
+      document.getElementById('t_chip_offline').textContent = t.chip_offline;
+      document.getElementById('t_chip_nbrk').textContent = t.chip_nbrk;
+      document.getElementById('t_upload_title').textContent = t.upload_title;
+      document.getElementById('t_drop_title').textContent = t.drop_title;
+      document.getElementById('t_drop_sub').textContent = t.drop_sub;
+      document.getElementById('t_samples_title').textContent = t.samples_title;
+      document.getElementById('t_sample_1').textContent = t.sample_1;
+      document.getElementById('t_sample_18').textContent = t.sample_18;
+      document.getElementById('t_sample_20').textContent = t.sample_20;
+      document.getElementById('t_sample_40').textContent = t.sample_40;
+      document.getElementById('t_sample_46').textContent = t.sample_46;
+      document.getElementById('t_sample_3').textContent = t.sample_3;
+      document.getElementById('t_start_btn').textContent = t.start_btn;
+      document.getElementById('t_progress_title').textContent = t.progress_title;
+      document.getElementById('t_laws_title').textContent = t.laws_title;
+      document.getElementById('t_laws_desc').textContent = t.laws_desc;
+      document.getElementById('t_law_1_tag').textContent = t.law_1_tag;
+      document.getElementById('t_law_1_body').textContent = t.law_1_body;
+      document.getElementById('t_law_2_tag').textContent = t.law_2_tag;
+      document.getElementById('t_law_2_body').textContent = t.law_2_body;
+      document.getElementById('t_law_3_tag').textContent = t.law_3_tag;
+      document.getElementById('t_law_3_body').textContent = t.law_3_body;
+      document.getElementById('t_monitor_title').textContent = t.monitor_title;
+      document.getElementById('t_video_empty_title').textContent = t.video_empty_title;
+      document.getElementById('t_video_empty_sub').textContent = t.video_empty_sub;
+      document.getElementById('t_timeline_label').textContent = t.timeline_label;
+      document.getElementById('t_verdict_label').textContent = t.verdict_label;
+      document.getElementById('t_json_btn').textContent = t.json_btn;
+      document.getElementById('t_json_spec').textContent = t.json_spec;
+      document.getElementById('t_copy_btn').textContent = t.copy_btn;
+      document.getElementById('modalCaption').textContent = t.modal_caption;
+      document.getElementById('t_footer_desc').textContent = t.footer_desc;
+      document.getElementById('t_footer_time').textContent = t.footer_time;
+      document.getElementById('t_footer_arch').textContent = t.footer_arch;
+
+      // Re-render results if active
+      if (latestAnalysis) {
+        renderResults(latestAnalysis);
+      }
+    }
+  </script>
+
+  <!-- JAVASCRIPT APP LOGIC -->
+  <script>
+    const API_KEY = "forte-datathon-2026-key";
+    let selectedFile = null;
+    let pollInterval = null;
+    let latestAnalysis = null;
+
+    const player = document.getElementById('player');
+    const timerDisplay = document.getElementById('videoTimer');
+
+    player.addEventListener('timeupdate', () => {
+      const s = player.currentTime;
+      const m = Math.floor(s / 60);
+      const sec = (s % 60).toFixed(1);
+      timerDisplay.textContent = `${String(m).padStart(2, '0')}:${String(sec).padStart(4, '0')}`;
+    });
+
+    const dropZone = document.getElementById('dropZone');
+    const fileInput = document.getElementById('fileInput');
+    const fileLabel = document.getElementById('fileLabel');
+
+    dropZone.addEventListener('click', () => fileInput.click());
+    dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('border-[#FF2E93]'); });
+    dropZone.addEventListener('dragleave', () => dropZone.classList.remove('border-[#FF2E93]'));
+    dropZone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      dropZone.classList.remove('border-[#FF2E93]');
+      if (e.dataTransfer.files.length) onFileSelected(e.dataTransfer.files[0]);
+    });
+
+    function onFileSelected(file) {
+      if (!file) return;
+      selectedFile = file;
+      fileLabel.textContent = `[OK]: ${file.name} (${(file.size / 1024 / 1024).toFixed(1)} MB)`;
+      fileLabel.classList.remove('hidden');
+
+      player.src = URL.createObjectURL(file);
+      document.getElementById('videoEmptyState').classList.add('hidden');
+    }
+
+    async function loadSample(filename, label) {
+      fileLabel.textContent = `Loading: ${filename}...`;
+      fileLabel.classList.remove('hidden');
+
+      const url = `/videos/${filename}`;
+      player.src = url;
+      document.getElementById('videoEmptyState').classList.add('hidden');
+
+      const res = await fetch(url);
+      const blob = await res.blob();
+      selectedFile = new File([blob], filename, { type: 'video/quicktime' });
+      fileLabel.textContent = `[OK]: ${filename} (${(blob.size / 1024 / 1024).toFixed(1)} MB)`;
+    }
+
+    // Start Analysis
+    async function startAnalysis() {
+      if (!selectedFile) {
+        alert(currentLang === 'kz' ? "Алдымен бейнефайлды таңдаңыз!" : (currentLang === 'en' ? "Please select a video file first!" : "Пожалуйста, сначала выберите видеофайл!"));
+        return;
+      }
+
+      const t = I18N[currentLang] || I18N.ru;
+      const startBtn = document.getElementById('startBtn');
+      startBtn.disabled = true;
+      startBtn.classList.add('opacity-50');
+
+      const progCard = document.getElementById('progressCard');
+      progCard.classList.remove('hidden');
+      const progFill = document.getElementById('progressBarFill');
+      const progPct = document.getElementById('progressPercent');
+      const progStage = document.getElementById('progressStage');
+      const progTimer = document.getElementById('progressTimer');
+
+      progFill.style.width = '20%';
+      progPct.textContent = '20%';
+      progStage.textContent = t.stage_upload;
+
+      const startTime = Date.now();
+      const timerInt = setInterval(() => {
+        progTimer.textContent = `${((Date.now() - startTime) / 1000).toFixed(1)}s`;
+      }, 100);
+
+      try {
+        const fd = new FormData();
+        fd.append('file', selectedFile);
+
+        const res = await fetch('/api/v1/analyze', {
+          method: 'POST',
+          headers: { 'X-API-Key': API_KEY },
+          body: fd
+        });
+
+        if (!res.ok) throw new Error(`API Error (${res.status}): ${await res.text()}`);
+
+        const data = await res.json();
+        const jobId = data.job_id;
+
+        progFill.style.width = '45%';
+        progPct.textContent = '45%';
+        progStage.textContent = `Job ID: [${jobId}] | ${t.stage_process}`;
+
+        let pollCount = 0;
+        pollInterval = setInterval(async () => {
+          pollCount++;
+          try {
+            const pollRes = await fetch(`/api/v1/jobs/${jobId}`, {
+              headers: { 'X-API-Key': API_KEY }
+            });
+            if (!pollRes.ok) return;
+
+            const jobData = await pollRes.json();
+            if (jobData.status === 'processing') {
+              const fake = Math.min(92, 45 + pollCount * 12);
+              progFill.style.width = `${fake}%`;
+              progPct.textContent = `${fake}%`;
+              progStage.textContent = `${t.stage_rules} (${pollCount}s)`;
+            } else if (jobData.status === 'done') {
+              clearInterval(pollInterval);
+              clearInterval(timerInt);
+              progFill.style.width = '100%';
+              progPct.textContent = '100%';
+              progStage.textContent = t.stage_done;
+
+              latestAnalysis = jobData;
+              renderResults(jobData);
+
+              startBtn.disabled = false;
+              startBtn.classList.remove('opacity-50');
+            } else if (jobData.status === 'failed') {
+              clearInterval(pollInterval);
+              clearInterval(timerInt);
+              progStage.textContent = 'Error: ' + (jobData.error || 'Failed');
+              progFill.classList.add('danger');
+              startBtn.disabled = false;
+              startBtn.classList.remove('opacity-50');
+            }
+          } catch (e) {
+            console.error(e);
+          }
+        }, 1000);
+
+      } catch (err) {
+        clearInterval(timerInt);
+        progStage.textContent = 'Error: ' + err.message;
+        progFill.classList.add('danger');
+        startBtn.disabled = false;
+        startBtn.classList.remove('opacity-50');
+      }
+    }
+
+    function renderResults(data) {
+      document.getElementById('resultsSection').classList.remove('hidden');
+      const t = I18N[currentLang] || I18N.ru;
+
+      const banner = document.getElementById('verdictBanner');
+      const text = document.getElementById('verdictText');
+      const iconContainer = document.getElementById('verdictIconContainer');
+      const list = document.getElementById('violationsList');
+      const totalLabel = document.getElementById('violationsTotal');
+
+      list.innerHTML = '';
+      const viols = data.violations || [];
+      totalLabel.textContent = viols.length;
+
+      if (data.verdict === 'violation' && viols.length > 0) {
+        banner.className = 'mc-card p-5 flex items-center justify-between border-l-4 border-[#f43f5e] bg-[#130a24]';
+        text.textContent = t.verdict_violation;
+        text.className = 'font-minecraft text-sm sm:text-base font-bold text-white tracking-wide';
+        iconContainer.className = 'bg-[#f43f5e]/20 text-[#f43f5e] p-2.5 rounded-full';
+        iconContainer.innerHTML = '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>';
+      } else {
+        banner.className = 'mc-card p-5 flex items-center justify-between border-l-4 border-[#5DB84A] bg-[#130a24]';
+        text.textContent = t.verdict_no_violation;
+        text.className = 'font-minecraft text-sm sm:text-base font-bold text-[#78CC63] tracking-wide';
+        iconContainer.className = 'bg-[#5DB84A]/20 text-[#78CC63] p-2.5 rounded-full';
+        iconContainer.innerHTML = '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>';
+      }
+
+      renderMarkers(viols);
+
+      if (viols.length === 0) {
+        list.innerHTML = `
+          <div class="mc-card p-8 text-center space-y-2 border-[#5DB84A]/40">
+            <h4 class="font-minecraft text-sm text-[#78CC63]">${t.verdict_clean_title}</h4>
+            <p class="text-xs text-gray-400 font-sans">${t.verdict_clean_sub}</p>
+          </div>
+        `;
+      } else {
+        viols.forEach((v, idx) => {
+          const card = document.createElement('div');
+          card.className = 'mc-card p-5 space-y-3.5 hover:border-[#FF2E93]/60 transition';
+
+          let framesHtml = '';
+          if (v.evidence_frames && v.evidence_frames.length > 0) {
+            framesHtml = `
+              <div class="space-y-1.5 pt-1">
+                <span class="text-xs font-minecraft text-[#F5C542] uppercase">${t.proof_frames} (${v.evidence_frames.length}):</span>
+                <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
+                  ${v.evidence_frames.map(f => `
+                    <div class="relative group cursor-pointer border border-[#2c1854] hover:border-[#F5C542] overflow-hidden" onclick="openModal('data:image/jpeg;base64,${f.image_base64}', '${v.type} (${f.timestamp_sec}s)')">
+                      <img src="data:image/jpeg;base64,${f.image_base64}" class="w-full h-24 object-cover" alt="Proof" />
+                      <span class="absolute bottom-1 right-1 bg-black/85 px-1.5 py-0.5 text-[11px] font-minecraft text-[#F5C542]">${f.timestamp_sec}s</span>
+                      <div class="absolute inset-0 bg-[#85004B]/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center text-xs font-minecraft text-white">
+                        ${t.view_frame}
+                      </div>
+                    </div>
+                  `).join('')}
+                </div>
+              </div>
+            `;
+          }
+
+          card.innerHTML = `
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[#2c1854] pb-3">
+              <div class="flex items-center gap-2">
+                <span class="px-2 py-0.5 bg-[#85004B] text-white text-xs font-bold font-minecraft">#${idx+1}</span>
+                <h4 class="font-minecraft text-white text-xs sm:text-sm">${v.type}</h4>
+              </div>
+              <button onclick="seekVideo(${v.timecode_sec})" class="btn-mc-secondary px-3 py-1 text-xs self-start sm:self-auto flex items-center gap-1.5 font-minecraft">
+                <span>${t.timecode}: <b class="text-[#F5C542]">${v.timecode_sec}s</b></span>
+                <span class="text-[#78CC63]">▶</span>
+              </button>
+            </div>
+
+            <p class="text-xs text-gray-300 leading-relaxed bg-[#0c051a] p-3 border border-[#2c1854] font-sans">
+              ${v.description}
+            </p>
+
+            ${framesHtml}
+          `;
+
+          list.appendChild(card);
+        });
+      }
+
+      document.getElementById('rawJsonCode').textContent = JSON.stringify(data, null, 2);
+    }
+
+    function renderMarkers(viols) {
+      const track = document.getElementById('timelineTrack');
+      track.innerHTML = '';
+      const dur = player.duration || 30.0;
+      const t = I18N[currentLang] || I18N.ru;
+
+      viols.forEach(v => {
+        const pct = Math.min(100, Math.max(0, (v.timecode_sec / dur) * 100));
+        const dot = document.createElement('div');
+        dot.className = 'absolute top-0 bottom-0 w-2.5 bg-[#FF4D6D] hover:scale-125 transition transform -translate-x-1/2 cursor-pointer shadow-[0_0_6px_#FF4D6D]';
+        dot.style.left = `${pct}%`;
+        dot.title = `${v.type} (${v.timecode_sec}s)`;
+        dot.onclick = () => seekVideo(v.timecode_sec);
+        track.appendChild(dot);
+      });
+
+      document.getElementById('markersText').textContent = `${viols.length} ${t.markers_unit}`;
+    }
+
+    function seekVideo(sec) {
+      player.currentTime = sec;
+      player.play();
+      player.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    function toggleJsonView() {
+      document.getElementById('rawJsonBox').classList.toggle('hidden');
+    }
+
+    function copyJsonToClipboard() {
+      const t = I18N[currentLang] || I18N.ru;
+      if (latestAnalysis) {
+        navigator.clipboard.writeText(JSON.stringify(latestAnalysis, null, 2));
+        alert(t.copied_alert);
+      }
+    }
+
+    function openModal(src, caption) {
+      document.getElementById('modalImg').src = src;
+      document.getElementById('modalCaption').textContent = caption;
+      document.getElementById('frameModal').classList.remove('hidden');
+    }
+
+    function closeFrameModal() {
+      document.getElementById('frameModal').classList.add('hidden');
+    }
+
+    // Initialize with stored or default language
+    setLang(currentLang);
+  </script>
+</body>
+</html>

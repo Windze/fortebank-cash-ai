@@ -1,0 +1,31 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.env
+.venv/
+env/
+venv/
+
+# Uploads and temporary frames
+uploads/*
+!uploads/.gitkeep
+sample_frames/*
+!sample_frames/.gitkeep
+*.log
+
+# Binaries
+cloudflared.exe
+*.exe
+
+# Videos (Organizers dataset - keep repo lightweight)
+open/videos/*.mov
+*.mov
+*.mp4
+
+# System files
+.DS_Store
+Thumbs.db
+desktop.ini
+.idea/
+.vscode/
